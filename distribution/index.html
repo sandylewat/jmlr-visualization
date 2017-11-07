@@ -12,7 +12,7 @@
         padding: 0;
         background: #000000 url(/globe/loading.gif) center center no-repeat;
         color: #ffffff;
-        font-family: sans-serif;
+        font-family: Arial, Helvetica, sans-serif;
         font-size: 13px;
         line-height: 20px;
         height: 100%;
@@ -31,7 +31,6 @@
       }
 
       #currentInfo {
-        width: 270px;
         position: absolute;
         left: 20px;
         top: 63px;
@@ -62,12 +61,12 @@
         left: 20px;
         background-color: rgba(0,0,0,0.2);
         border-radius: 3px;
-        font: 20px Georgia;
+        font: 20px;
         padding: 10px;
       }
 
       .year {
-        font: 16px Georgia;
+        font: 16px;
         line-height: 26px;
         height: 30px;
         text-align: center;
@@ -79,9 +78,14 @@
         -webkit-transition: all 0.1s ease-out;
       }
 
-      .year:hover, .year.active {
+      .year.active {
         font-size: 23px;
         color: #fff;
+      }
+
+      .year:hover, {
+        font-size: 23px;
+        color: #ddd;
       }
 
       #ce span {
@@ -111,30 +115,48 @@
 
   <div id="currentInfo">
     <span id="year1990" class="year">1990</span>
-    <span id="year1995" class="year">1995</span>
     <span id="year2000" class="year">2000</span>
+    <span id="year2001" class="year">2001</span>
+    <span id="year2002" class="year">2002</span>
+    <span id="year2003" class="year">2003</span>
+    <span id="year2004" class="year">2004</span>
+    <span id="year2005" class="year">2005</span>
+    <span id="year2006" class="year">2006</span>
+    <span id="year2007" class="year">2007</span>
+    <span id="year2008" class="year">2008</span>
+    <span id="year2009" class="year">2009</span>
+    <span id="year2010" class="year">2010</span>
+    <span id="year2011" class="year">2011</span>
+    <span id="year2012" class="year">2012</span>
+    <span id="year2013" class="year">2013</span>
+    <span id="year2014" class="year">2014</span>
+    <span id="year2015" class="year">2015</span>
+    <span id="year2016" class="year">2016</span>
   </div>
 
   <div id="title">
-    World Population
+    JMLC Paper Distribution
   </div>
 
   <a id="ce" href="http://www.chromeexperiments.com/globe">
     <span>This is a Chrome Experiment</span>
   </a>
 
-  <script type="text/javascript" src="/globe/third-party/Detector.js"></script>
-  <script type="text/javascript" src="/globe/third-party/three.min.js"></script>
-  <script type="text/javascript" src="/globe/third-party/Tween.js"></script>
-  <script type="text/javascript" src="/globe/globe.js"></script>
+  <script type="text/javascript" src="third-party/Detector.js"></script>
+  <script type="text/javascript" src="third-party/three.min.js"></script>
+  <script type="text/javascript" src="third-party/Tween.js"></script>
+  <script type="text/javascript" src="/frontend/public/js/lib/turf.min.js"></script>
+  <script type="text/javascript" src="globe.js"></script>
+  <script type="text/javascript" src="/frontend/data/countries2.js"></script>
+  <script type="text/javascript" src="/frontend/data/activeCountries.js"></script>
+  
   <script type="text/javascript">
 
     if(!Detector.webgl){
       Detector.addGetWebGLMessage();
     } else {
 
-      // var years = ['1990','1995','2000'];
-      var years = ['1990'];
+      var years = ['1990'];//, '2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016'];
       var container = document.getElementById('container');
       var globe = new DAT.Globe(container);
 
@@ -166,22 +188,22 @@
       
       var points = [];
       for(var lat = -15; lat < 15; ++lat) {
-        for(var long = -180; long < 180; ++long) {
+        for(var long = -20; long < 20; ++long) {
           points.push(lat, long, 0.005)
         }
       }
       
 
       xhr = new XMLHttpRequest();
-      xhr.open('GET', 'population909500.json', true);
+      xhr.open('GET', '/frontend/data/jmlrMembers.json', true);
       xhr.onreadystatechange = function(e) {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
             var data = JSON.parse(xhr.responseText);
             window.data = data;
-            for (i=0;i<data.length;i++) {
+            for (i=0;i<years.length;i++) {
               //globe.addData(data[i][1], {format: 'magnitude', name: data[i][0], animated: true});
-              globe.addData(points, {format: 'magnitude', name: data[i][0], animated: true});
+              globe.addData(data[i][1], {format: 'magnitude', name: data[i][0], animated: true});
             }
             globe.createPoints();
             settime(globe,0)();
@@ -191,8 +213,44 @@
         }
       };
       xhr.send(null);
+    }   
+
+    function check() {
+      activeCountries.forEach(function(entry) {
+        if(!countries.features.some(function(feature) {
+          return feature.properties.name == entry;
+        })) {
+          console.log(entry);
+        }
+      }, this);
     }
 
+    var countryGrid = [];
+    var featureList = [];
+    function initGrid() {
+      activeCountries.forEach(function(entry) {
+        var feature = countries.features.find(function(feature) {
+          return feature.properties.name == entry;
+        });
+
+        featureList.push(feature);
+        if(typeof feature == "undefined") {
+          console.log(entry);
+        } else {
+          countryGrid.push({
+            name: entry,
+            grids: turf.coordAll(turf.pointGrid(feature,1,'degrees',true,true))
+          });
+        }
+      }, this);
+    };
+    var data = [];
+    countryGrid.forEach(function(cg) {
+      cg.grids.forEach(function(grid) {
+        data.push(grid[1],grid[0], 0.001)
+      }, this);
+    }, this);
+    
   </script>
 
   </body>
