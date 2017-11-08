@@ -149,6 +149,7 @@
   <script type="text/javascript" src="globe.js"></script>
   <script type="text/javascript" src="/frontend/data/countries2.js"></script>
   <script type="text/javascript" src="/frontend/data/activeCountries.js"></script>
+  <script type="text/javascript" src="/frontend/data/cityFrequency.js"></script>
   
   <script type="text/javascript">
 
@@ -202,7 +203,6 @@
             var data = JSON.parse(xhr.responseText);
             window.data = data;
             for (i=0;i<years.length;i++) {
-              //globe.addData(data[i][1], {format: 'magnitude', name: data[i][0], animated: true});
               globe.addData(data[i][1], {format: 'magnitude', name: data[i][0], animated: true});
             }
             globe.createPoints();
@@ -244,12 +244,33 @@
         }
       }, this);
     };
+    
     var data = [];
-    countryGrid.forEach(function(cg) {
-      cg.grids.forEach(function(grid) {
-        data.push(grid[1],grid[0], 0.001)
+    function getData() {
+      countryGrid.forEach(function(cg) {
+         cg.grids.forEach(function(grid) {
+           data.push(grid[1],grid[0], getNearestValue(cities, grid[1], grid[0], 44, 0.001))
+         }, this);
       }, this);
-    }, this);
+      cities.forEach(function(city) {
+          data.push(city.lat, city.long, city.frequency/44/4);
+      }, this);
+    };
+
+    function getNearestValue(cities, lat, long, max, def=0.001) {
+      var val = def*max;
+      var distance = Infinity;
+      cities.forEach(function(city) {
+        currentDistance = (lat - city.lat) * (lat - city.lat) + (long - city.long) * (long - city.long);
+        if(distance > currentDistance) {
+          distance = currentDistance;
+          val = city.frequency;
+        }
+      }, this);
+      val = val/max/4;
+      return val*Math.exp(-distance/5);
+    }
+    
     
   </script>
 
