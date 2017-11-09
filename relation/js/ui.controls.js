@@ -30,7 +30,7 @@ var d3Graphs = {
     inited: false,
     histogramOpen: false,
     handleLeftOffset: 12,
-    handleInterval: 35,
+    handleInterval: 41.5,
     windowResizeTimeout: -1,
     histogramImports: null,
     histogramExports: null,
@@ -96,13 +96,11 @@ var d3Graphs = {
     },
     clickTimeline:function() {
         var year = $(this).html();
-        if(year < 10) {
+        if(year < 100) {
             year = (year * 1) + 2000;
         }
-        if(year < 100) {
-            year = (year * 1) + 1900
-        }
-        var index = year - 1992;
+
+        var index = year - 2001;
         var leftPos = d3Graphs.handleLeftOffset + d3Graphs.handleInterval * index;
         $("#handle").css('left',leftPos+"px");
         d3Graphs.updateViz();
@@ -168,7 +166,7 @@ var d3Graphs = {
         yearOffset = yearOffset.substr(0,yearOffset.length-2);
         yearOffset -= d3Graphs.handleLeftOffset;
         yearOffset /= d3Graphs.handleInterval;
-        var year = yearOffset + 1992;
+        var year = yearOffset + 2001;
         
         var country = $("#hudButtons .countryTextInput").val().toUpperCase();
         if(typeof countryData[country] == 'undefined') {
@@ -641,7 +639,7 @@ var d3Graphs = {
                 var textLabel = importLabel.append('text').text(function(d) {
                     return reverseWeaponLookup[d.type].split(' ')[0].toUpperCase();
                 }).attr('text-anchor','end').attr('y',8).attr('class',function(d) { return 'import '+d.type});
-                var weaponLabel  =importLabel.append('text').text('WEAPONS').attr('text-anchor','end').attr('y',21)
+                var weaponLabel  =importLabel.append('text').text('').attr('text-anchor','end').attr('y',21)
                     .attr('class',function(d) { return'import '+d.type} );
                 labelHeight = fontSizeInterpolater((data.amount-minImExAmount)/(maxImExAmount-minImExAmount));
                 labelBGYPos = -labelHeight - 7;
@@ -730,7 +728,7 @@ var d3Graphs = {
                 var textLabel = exportLabel.append('text').text(function(d) {
                     return reverseWeaponLookup[d.type].split(' ')[0].toUpperCase();
                 }).attr('text-anchor','start').attr('y',8).attr('class',function(d) { return 'export '+d.type});
-                var weaponLabel  =exportLabel.append('text').text('WEAPONS').attr('text-anchor','start').attr('y',21)
+                var weaponLabel  =exportLabel.append('text').text('').attr('text-anchor','start').attr('y',21)
                     .attr('class',function(d) { return'export '+d.type} );
                 labelHeight = fontSizeInterpolater((data.amount-minImExAmount)/(maxImExAmount-minImExAmount));
                 labelBGYPos = -labelHeight - 7;
@@ -760,12 +758,12 @@ var d3Graphs = {
         exportTotalLabel.text(abbreviateNumber(exportTotal)).attr('visibility',exportsVisible ? "visible":"hidden");
         //Import label at bottom
         var importLabel = this.barGraphSVG.selectAll('text.importLabel').data([1]);
-        importLabel.enter().append('text').attr('x',midX).attr('text-anchor','end').text('IMPORTS')
+        importLabel.enter().append('text').attr('x',midX).attr('text-anchor','end').text('CITING')
             .attr('class','importLabel').attr('y', this.barGraphHeight - this.barGraphBottomPadding + 45);
         importLabel.attr('visibility',importsVisible ? "visible":"hidden");
         //Export label at bottom
         var exportLabel = this.barGraphSVG.selectAll('text.exportLabel').data([1]);
-        exportLabel.enter().append('text').attr('x',midX+10).text('EXPORTS')
+        exportLabel.enter().append('text').attr('x',midX+10).text('CITED')
             .attr('class','exportLabel').attr('y', this.barGraphHeight - this.barGraphBottomPadding + 45);
         exportLabel.attr('visibility',exportsVisible ? "visible":"hidden")        
     },
@@ -800,6 +798,6 @@ function abbreviateNumber(value) {
         if (shortValue % 1 != 0)  shortNum = shortValue.toFixed(1);
         newValue = shortValue+suffixes[suffixNum];
     }
-    return '$' + newValue;
+    return newValue;
 }
 
