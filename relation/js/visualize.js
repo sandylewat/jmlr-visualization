@@ -1,3 +1,5 @@
+var undefinedCountries = [];
+
 function buildDataVizGeometries( linearData ){	
 
 	var loadLayer = document.getElementById('loading');
@@ -21,7 +23,13 @@ function buildDataVizGeometries( linearData ){
 			
 			//	we couldn't find the country, it wasn't in our list...
 			if( exporter === undefined || importer === undefined )
-				continue;			
+			{
+				if(exporter === undefined && undefinedCountries[exporterName] === undefined)
+					undefinedCountries[exporterName] = true;
+				if(importer === undefined && undefinedCountries[importerName] === undefined)
+					undefinedCountries[importerName] = true;
+				continue;							
+			}
 
 			//	visualize this event
 			set.lineGeometry = makeConnectionLineGeometry( exporter, importer, set.v, set.wc );		
@@ -48,7 +56,7 @@ function getVisualizedMesh( linearData, year, countries, exportCategories, impor
 	}
 
 	//	pick out the year first from the data
-	var indexFromYear = parseInt(year) - 1992;
+	var indexFromYear = parseInt(year) - 2001;
 	if( indexFromYear >= timeBins.length )
 		indexFromYear = timeBins.length-1;
 
