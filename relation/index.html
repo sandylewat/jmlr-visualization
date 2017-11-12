@@ -1,27 +1,36 @@
 <!doctype html>
 <html lang="en">
-	<head>
-		<title>Interactive Globe: JMLC Paper Citation</title>
-		<meta charset="utf-8">
-		<meta name="viewport" content="user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1">
-		<link rel="stylesheet" type="text/css" href="style.css">
 
-	</head>
+<head>
+	<title>Interactive Globe: JMLR Paper Citation</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="style.css">
 
-	<body onload="start()" id="dataviz" class="">
-		<div id="wrapper">
+</head>
+
+<body onload="start()" id="dataviz" class="">
+	<div id="wrapper">
 		<div id="loading">
 			<h2>Preparing hamsters wheel ....</h2>
 		</div>
 
-		<div >
-			<table id="marker_template" class="marker" style="left:'0px';top:'0px'"><tr><td><span id="countryText" class="country">
-			</span></td><td class="detail" id="detailText">
-			<!--<span id="detailText" class="detail">
-			</span>--></td></tr></table>
+		<div>
+			<table id="marker_template" class="marker" style="left:'0px';top:'0px'">
+				<tr>
+					<td>
+						<span id="countryText" class="country">
+						</span>
+					</td>
+					<td class="detail" id="detailText">
+						<!--<span id="detailText" class="detail">
+			</span>-->
+					</td>
+				</tr>
+			</table>
 		</div>
 
-		<div id="visualization" >
+		<div id="visualization">
 			<!-- 2D overlay elements go in here -->
 
 			<div id="glContainer">
@@ -37,8 +46,8 @@
 		<script src="js/THREEx.WindowResize.js"></script>
 		<script src="js/Stats.js"></script>
 		<script src="js/jquery-1.7.1.min.js"></script>
-    	<script src="js/jquery-ui-1.8.21.custom.min.js"></script>
-    	<script src="js/RequestAnimationFrame.js"></script>
+		<script src="js/jquery-ui-1.8.21.custom.min.js"></script>
+		<script src="js/RequestAnimationFrame.js"></script>
 		<script src="js/ShaderExtras.js"></script>
 		<script src="js/canvg.js"></script>
 		<script src="js/rgbcolor.js"></script>
@@ -124,90 +133,106 @@
 			}
 		</script>
 
+		<script type="text/javascript">
+			var url_string = window.location.href; //window.location.href
+			var url = new URL(url_string);
+			var c = url.searchParams.get("countryName");
+			var selectedCountry_ = c || "UNITED STATES";
+		</script>
 		<script src="js/main.js" type="text/javascript"></script>
 
 		<!-- All other hud can go here-->
-        <div id="hudHeader" class="overlayCountries noPointer">
-            <h1 class="noPointer">Journal of Machine Learning Researchs
-                <div class="subtitle">Citations and topics trend of JMLR from 2000 to 2016 </div>
+		<div id="hudHeader" class="overlayCountries noPointer">
+			<h1 class="noPointer">Journal of Machine Learning Researchs
+				<div class="subtitle">Citations and topics trend of JMLR from 2000 to 2016 </div>
 			</h1>
-        </div>
+		</div>
 
 		<div class="overlayCountries noPointer" id="hudButtons">
-            <input type="button" value="SEARCH" class="searchBtn armsBtn pointer">
-            <input type="text" name="country" class="countryTextInput pointer noMapDrag" value="UNITED STATES">
-            <input type="button" value="—" class="zoomBtn zoomOutBtn armsBtn pointer noMapDrag">
-            <input type="button" value="+" class="zoomBtn zoomInBtn armsBtn pointer noMapDrag">
-            <input type="button" value="ABOUT" class="aboutBtn armsBtn pointer"><br class="clear" />
-        </div>
-        <div id="history" class="overlayCountries noPointer">
-            <div class="graph">
-                <div class="close"></div>
-                <div class="labels">
-                    <div class="change">RELATIVE PERCENT CHANGE</div>
-                    <div class="exports">CITED</div>
-                    <div class="imports">CITING</div><br class="clear" />
-                </div>
-                <div class="container noPointer"></div>
-            </div>
-            <ul class="timeline pointer">
-                <li>2001</li>
-                <li>02</li>
-                <li>03</li>
-                <li>04</li>
-                <li>05</li>
-                <li>06</li>
-                <li>07</li>
-                <li>08</li>
-                <li>09</li>
+			<input type="button" value="SEARCH" class="searchBtn armsBtn pointer">
+			<input type="text" name="country" class="countryTextInput pointer noMapDrag" value="INDONESIA">
+			<input type="button" value="—" class="zoomBtn zoomOutBtn armsBtn pointer noMapDrag">
+			<input type="button" value="+" class="zoomBtn zoomInBtn armsBtn pointer noMapDrag">
+			<input type="button" value="ABOUT" class="aboutBtn armsBtn pointer">
+			<input type="button" value="DASHBOARD" class="armsBtn pointer" onclick="location.href='../dashboard/index.html'">
+			<br class="clear" />
+		</div>
+		<div id="history" class="overlayCountries noPointer">
+			<div class="graph">
+				<div class="close"></div>
+				<div class="labels">
+					<div class="change">RELATIVE PERCENT CHANGE</div>
+					<div class="exports">CITED</div>
+					<div class="imports">CITING</div>
+					<br class="clear" />
+				</div>
+				<div class="container noPointer"></div>
+			</div>
+			<ul class="timeline pointer">
+				<li>2001</li>
+				<li>02</li>
+				<li>03</li>
+				<li>04</li>
+				<li>05</li>
+				<li>06</li>
+				<li>07</li>
+				<li>08</li>
+				<li>09</li>
 				<li>2010</li>
 				<li>11</li>
-                <li>12</li>
-                <li>13</li>
-                <li>14</li>
-                <li>15</li>
-                <li>2016</li>
-                <div id="handle" class="noMapDrag"></div>
-            </ul>
-        </div>
-        <div id="graphIcon" class="overlayCountries"></div>
-        <div id="importExportBtns" class="overlayCountries" style="display:none">
-            <div class="typeLabels">
-                <div class="mil">Type</div>
+				<li>12</li>
+				<li>13</li>
+				<li>14</li>
+				<li>15</li>
+				<li>2016</li>
+				<div id="handle" class="noMapDrag"></div>
+			</ul>
+		</div>
+		<div id="graphIcon" class="overlayCountries"></div>
+		<div id="importExportBtns" class="overlayCountries" style="display:none">
+			<div class="typeLabels">
+				<div class="mil">Type</div>
 				<br class="clear">
-            </div>
-            <div class="imports imex">
-                <div class="mil"><div class="check"></div></div>
-                <div class="label">Citing</div><br class="clear">
-            </div>
-            <div class="exports imex">
-                <div class="mil"><div class="check"></div></div>
-                <div class="label">Cited</div><br class="clear">
-            </div>
-            <br class="clear" />
-        </div>
+			</div>
+			<div class="imports imex">
+				<div class="mil">
+					<div class="check"></div>
+				</div>
+				<div class="label">Citing</div>
+				<br class="clear">
+			</div>
+			<div class="exports imex">
+				<div class="mil">
+					<div class="check"></div>
+				</div>
+				<div class="label">Cited</div>
+				<br class="clear">
+			</div>
+			<br class="clear" />
+		</div>
 
-        <div id="aboutContainer" class='overlayCountries'>
-            <div class="arrowUp"></div>
-            <div id="aboutBox">
+		<div id="aboutContainer" class='overlayCountries'>
+			<div class="arrowUp"></div>
+			<div id="aboutBox">
 				<div class="title">Visualization</div>
 				<div class="text">
 					This data visualization reused the well known ArmsGlobe visualization</div>
 				<div class="links">
-					<br>
-					For more info, please see the <a href="http://igarape.org.br/armsglobe" target="_blank">FAQs</a>.
+					<br> For more info, please see the
+					<a href="http://igarape.org.br/armsglobe" target="_blank">FAQs</a>.
 				</div>
 				<br>
-                <div class="title">Data</div>
-                <div class="text">
-					Data was taken from JLMR with preprocessing and mining done to get suitable data. 
+				<div class="title">Data</div>
+				<div class="text">
+					Data was taken from JLMR with preprocessing and mining done to get suitable data.
 				</div>
-                <div class="links">
-                	<br>
-                    For more info, please see the <a href="http://igarape.org.br/armsglobe" target="_blank">FAQs</a>.
-                </div>
-            </div>
-        </div>
-    </div>
-	</body>
+				<div class="links">
+					<br> For more info, please see the
+					<a href="http://igarape.org.br/armsglobe" target="_blank">FAQs</a>.
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
 </html>

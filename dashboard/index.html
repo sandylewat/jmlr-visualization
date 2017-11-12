@@ -431,14 +431,16 @@
 				.attr("width", width)
 				.attr("height", height);
 
-			d3.tsv("data/world-country-names.tsv", function (error, names) {
+			d3.tsv("data/world-country-names.2.tsv", function (error, names) {
 
 				name_id_map = {};
+				name_id_map_iso = {};
 				id_name_map = {};
 
 				for (var i = 0; i < names.length; i++) {
 					name_id_map[names[i].name] = names[i].id;
 					id_name_map[names[i].id] = names[i].name;
+					name_id_map_iso[names[i].id] = names[i].iso_name;
 				}
 
 				data.forEach(function (d) {
@@ -642,7 +644,7 @@
 
 						.on("click", function (d) {
 							// alert(JSON.stringify(d));
-							location.href='../distribution'
+							location.href='../relation/index.html?countryName=' + name_id_map_iso[d.id]
 						});;
 
 					svg.append("path")

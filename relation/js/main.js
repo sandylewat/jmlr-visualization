@@ -131,7 +131,7 @@ function start( e ){
 
 var Selection = function(){
 	this.selectedYear = '2016';
-	this.selectedCountry = 'UNITED STATES';
+	this.selectedCountry = selectedCountry_;
 	// this.showExports = true;
 	// this.showImports = true;
 	// this.importExportFilter = 'both';
@@ -290,7 +290,7 @@ function initScene() {
 
 	buildGUI();
 
-	selectVisualization( timeBins, '2016', ['UNITED STATES'], ['Paper'], ['Paper'] );					
+	selectVisualization( timeBins, '2016', [selectedCountry_], ['Paper'], ['Paper'] );					
 
 		// test for highlighting specific countries
 	// highlightCountry( ["United States", "Switzerland", "China"] );
