@@ -2,6 +2,7 @@ var globeRadius = 1000;
 var vec3_origin = new THREE.Vector3(0,0,0);
 
 function makeConnectionLineGeometry( exporter, importer, value, type ){
+	value *= 10000;
 	if( exporter.countryName == undefined || importer.countryName == undefined )
 		return undefined;
 
