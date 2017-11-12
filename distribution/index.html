@@ -271,14 +271,14 @@
       var distance = Infinity;
       for(var i=0; i< yearData.length/3; ++i) {
         var offset = i*3;
-        var manhattanDistance = (lat - yearData[offset])*(lat - yearData[offset]) + (long - yearData[offset+1])*(long - yearData[offset+1]);
-        if(distance > manhattanDistance) {
-          distance = manhattanDistance;
+        var squaredDistance = (lat - yearData[offset])*(lat - yearData[offset]) + (long - yearData[offset+1])*(long - yearData[offset+1]);
+        if(distance > squaredDistance) {
+          distance = squaredDistance;
           val = yearData[offset + 2];
         }
       }
       return val*Math.exp(-distance/5);
-1    }
+    }
 
     function getNearestValue(cities, lat, long, max, def=0.001) {
       var val = def*max;
