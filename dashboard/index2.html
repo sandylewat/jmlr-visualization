@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta charset="utf-8" />
+	<title>Visualisasi Data</title>
+
+	<meta name="description" content="top menu &amp; navigation" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+	<!-- bootstrap & fontawesome -->
+	<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
+	<link rel="stylesheet" href="assets/font-awesome/4.5.0/css/font-awesome.min.css" />
+
+	<!-- page specific plugin styles -->
+
+	<!-- text fonts -->
+	<link rel="stylesheet" href="assets/css/fonts.googleapis.com.css" />
+
+	<!-- ace styles -->
+	<link rel="stylesheet" href="assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+
+	<!--[if lte IE 9]>
+			<link rel="stylesheet" href="assets/css/ace-part2.min.css" class="ace-main-stylesheet" />
+		<![endif]-->
+	<link rel="stylesheet" href="assets/css/ace-skins.min.css" />
+	<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
+
+	<!--[if lte IE 9]>
+		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
+		<![endif]-->
+
+	<!-- inline styles related to this page -->
+
+	<!-- ace settings handler -->
+	<script src="assets/js/ace-extra.min.js"></script>
+
+	<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+
+	<!--[if lte IE 8]>
+		<script src="assets/js/html5shiv.min.js"></script>
+		<script src="assets/js/respond.min.js"></script>
+		<![endif]-->
+	<style>
+		#globe {
+			cursor: move;
+		}
+
+		#current {
+			position: absolute;
+			color: white;
+			font-family: sans-serif;
+			margin-left: 4%;
+			margin-top: 4%;
+		}
+	</style>
+
+</head>
+
+<body class="no-skin">
+	<div id="navbar" class="navbar navbar-default    navbar-collapse       h-navbar ace-save-state">
+		<div class="navbar-container ace-save-state" id="navbar-container">
+			<div class="navbar-header pull-left">
+				<a href="index.html" class="navbar-brand">
+					<small>
+						<i class="fa fa-leaf"></i>
+						Visualisasi Data
+					</small>
+				</a>
+
+				<button class="pull-right navbar-toggle navbar-toggle-img collapsed" type="button" data-toggle="collapse" data-target=".navbar-buttons,.navbar-menu">
+					<span class="sr-only">Toggle user menu</span>
+
+					<img src="assets/images/avatars/user.jpg" alt="Jason's Photo" />
+				</button>
+
+				<button class="pull-right navbar-toggle collapsed" type="button" data-toggle="collapse" data-target="#sidebar">
+					<span class="sr-only">Toggle sidebar</span>
+
+					<span class="icon-bar"></span>
+
+					<span class="icon-bar"></span>
+
+					<span class="icon-bar"></span>
+				</button>
+			</div>
+		</div>
+		<!-- /.navbar-container -->
+	</div>
+
+	<div class="main-container ace-save-state" id="main-container">
+		<script type="text/javascript">
+			try { ace.settings.loadState('main-container') } catch (e) { }
+		</script>
+
+		<div id="sidebar" class="sidebar h-sidebar navbar-collapse collapse ace-save-state">
+			<script type="text/javascript">
+				try { ace.settings.loadState('sidebar') } catch (e) { }
+			</script>
+
+			<ul class="nav nav-list">
+				<li class="hover">
+					<a href="index.html">
+						<i class="menu-icon fa fa-tachometer"></i>
+						<span class="menu-text"> Dashboard </span>
+					</a>
+					<b class="arrow"></b>
+				</li>
+				<li class="hover">
+					<a href="index2.html">
+						<i class="menu-icon fa fa-tachometer"></i>
+						<span class="menu-text"> Maps 3D </span>
+					</a>
+					<b class="arrow"></b>
+				</li>
+			</ul>
+			<!-- /.nav-list -->
+		</div>
+
+		<div class="main-content">
+			<div class="main-content-inner">
+				<div class="page-content">
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<h2 id="current"></h2>
+							<canvas id="globe"></canvas>
+							<!-- PAGE CONTENT ENDS -->
+						</div>
+						<!-- /.col -->
+					</div>
+					<!-- /.row -->
+				</div>
+				<!-- /.page-content -->
+			</div>
+		</div>
+		<!-- /.main-content -->
+
+		<div class="footer">
+			<div class="footer-inner">
+				<div class="footer-content">
+					<span class="bigger-120">
+						Visualisasi Data 2017
+					</span>
+				</div>
+			</div>
+		</div>
+
+		<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+			<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+		</a>
+	</div>
+	<!-- /.main-container -->
+
+	<!-- basic scripts -->
+
+	<!--[if !IE]> -->
+	<script src="assets/js/jquery-2.1.4.min.js"></script>
+
+	<!-- <![endif]-->
+
+	<!--[if IE]>
+<script src="assets/js/jquery-1.11.3.min.js"></script>
+<![endif]-->
+	<script type="text/javascript">
+				if ('ontouchstart' in document.documentElement) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+	</script>
+	<script src="assets/js/bootstrap.min.js"></script>
+
+	<!-- page specific plugin scripts -->
+
+	<!-- ace scripts -->
+	<script src="assets/js/ace-elements.min.js"></script>
+	<script src="assets/js/ace.min.js"></script>
+
+	<!-- inline scripts related to this page -->
+	<script type="text/javascript">
+				jQuery(function ($) {
+					var $sidebar = $('.sidebar').eq(0);
+					if (!$sidebar.hasClass('h-sidebar')) return;
+
+					$(document).on('settings.ace.top_menu', function (ev, event_name, fixed) {
+						if (event_name !== 'sidebar_fixed') return;
+
+						var sidebar = $sidebar.get(0);
+						var $window = $(window);
+
+						//return if sidebar is not fixed or in mobile view mode
+						var sidebar_vars = $sidebar.ace_sidebar('vars');
+						if (!fixed || (sidebar_vars['mobile_view'] || sidebar_vars['collapsible'])) {
+							$sidebar.removeClass('lower-highlight');
+							//restore original, default marginTop
+							sidebar.style.marginTop = '';
+
+							$window.off('scroll.ace.top_menu')
+							return;
+						}
+
+
+						var done = false;
+						$window.on('scroll.ace.top_menu', function (e) {
+
+							var scroll = $window.scrollTop();
+							scroll = parseInt(scroll / 4);//move the menu up 1px for every 4px of document scrolling
+							if (scroll > 17) scroll = 17;
+
+
+							if (scroll > 16) {
+								if (!done) {
+									$sidebar.addClass('lower-highlight');
+									done = true;
+								}
+							}
+							else {
+								if (done) {
+									$sidebar.removeClass('lower-highlight');
+									done = false;
+								}
+							}
+
+							sidebar.style['marginTop'] = (17 - scroll) + 'px';
+						}).triggerHandler('scroll.ace.top_menu');
+
+					}).triggerHandler('settings.ace.top_menu', ['sidebar_fixed', $sidebar.hasClass('sidebar-fixed')]);
+
+					$(window).on('resize.ace.top_menu', function () {
+						$(document).triggerHandler('settings.ace.top_menu', ['sidebar_fixed', $sidebar.hasClass('sidebar-fixed')]);
+					});
+
+
+				});
+	</script>
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.2/d3.min.js"></script>
+	<script src="https://d3js.org/d3-geo.v1.min.js"></script>
+	<script src="https://d3js.org/topojson.v2.min.js"></script>
+	<script src="https://bl.ocks.org/mbostock/raw/7ea1dde508cec6d2d95306f92642bc42/6aac691494f752142a67cc43c51a0fd09896dbd4/versor.js"></script>
+
+	<script>
+				//
+				// Configuration
+				//
+
+				// ms to wait after dragging before auto-rotating
+				var rotationDelay = 3000
+				// scale of the globe (not the canvas element)
+				var scaleFactor = 0.9
+				// autorotation speed
+				var degPerSec = 6
+				// start angles
+				var angles = { x: -20, y: 40, z: 0 }
+				// colors
+				var colorWater = '#fff'
+				var colorLand = '#111'
+				var colorGraticule = '#ccc'
+				var colorCountry = '#a00'
+
+
+				//
+				// Handler
+				//
+
+				function enter(country) {
+					var country = countryList.find(function (c) {
+						return c.id === country.id
+					})
+					current.text(country && country.name || '')
+				}
+
+				function leave(country) {
+					current.text('')
+				}
+
+				//
+				// Variables
+				//
+
+				var current = d3.select('#current')
+				var canvas = d3.select('#globe')
+				var context = canvas.node().getContext('2d')
+				var water = { type: 'Sphere' }
+				var projection = d3.geoOrthographic().precision(0.1)
+				var graticule = d3.geoGraticule10()
+				var path = d3.geoPath(projection).context(context)
+				var v0 // Mouse position in Cartesian coordinates at start of drag gesture.
+				var r0 // Projection rotation as Euler angles at start.
+				var q0 // Projection rotation as versor at start.
+				var lastTime = d3.now()
+				var degPerMs = degPerSec / 1000
+				var width, height
+				var land, countries
+				var countryList
+				var autorotate, now, diff, roation
+				var currentCountry
+
+				//
+				// Functions
+				//
+
+				function setAngles() {
+					var rotation = projection.rotate()
+					rotation[0] = angles.y
+					rotation[1] = angles.x
+					rotation[2] = angles.z
+					projection.rotate(rotation)
+				}
+
+				function scale() {
+					width = document.documentElement.clientWidth - 100
+					height = document.documentElement.clientHeight
+					canvas.attr('width', width).attr('height', height)
+					projection
+						.scale((scaleFactor * Math.min(width, height)) / 2)
+						.translate([width / 2, height / 2])
+					render()
+				}
+
+				function startRotation(delay) {
+					autorotate.restart(rotate, delay || 0)
+				}
+
+				function stopRotation() {
+					autorotate.stop()
+				}
+
+				function dragstarted() {
+					v0 = versor.cartesian(projection.invert(d3.mouse(this)))
+					r0 = projection.rotate()
+					q0 = versor(r0)
+					stopRotation()
+				}
+
+				function dragged() {
+					var v1 = versor.cartesian(projection.rotate(r0).invert(d3.mouse(this)))
+					var q1 = versor.multiply(q0, versor.delta(v0, v1))
+					var r1 = versor.rotation(q1)
+					projection.rotate(r1)
+					render()
+				}
+
+				function dragended() {
+					startRotation(rotationDelay)
+				}
+
+				function render() {
+					context.clearRect(0, 0, width, height)
+					fill(water, colorWater)
+					stroke(graticule, colorGraticule)
+					fill(land, colorLand)
+					if (currentCountry) {
+						fill(currentCountry, colorCountry)
+					}
+				}
+
+				function fill(obj, color) {
+					context.beginPath()
+					path(obj)
+					context.fillStyle = color
+					context.fill()
+				}
+
+				function stroke(obj, color) {
+					context.beginPath()
+					path(obj)
+					context.strokeStyle = color
+					context.stroke()
+				}
+
+				function rotate(elapsed) {
+					now = d3.now()
+					diff = now - lastTime
+					if (diff < elapsed) {
+						rotation = projection.rotate()
+						rotation[0] += diff * degPerMs
+						projection.rotate(rotation)
+						render()
+					}
+					lastTime = now
+				}
+
+				function loadData(cb) {
+					d3.json('https://unpkg.com/world-atlas@1/world/110m.json', function (error, world) {
+						if (error) throw error
+						d3.tsv('https://gist.githubusercontent.com/mbostock/4090846/raw/07e73f3c2d21558489604a0bc434b3a5cf41a867/world-country-names.tsv', function (error, countries) {
+							if (error) throw error
+							cb(world, countries)
+						})
+					})
+				}
+
+				// https://github.com/d3/d3-polygon
+				function polygonContains(polygon, point) {
+					var n = polygon.length
+					var p = polygon[n - 1]
+					var x = point[0], y = point[1]
+					var x0 = p[0], y0 = p[1]
+					var x1, y1
+					var inside = false
+					for (var i = 0; i < n; ++i) {
+						p = polygon[i], x1 = p[0], y1 = p[1]
+						if (((y1 > y) !== (y0 > y)) && (x < (x0 - x1) * (y - y1) / (y0 - y1) + x1)) inside = !inside
+						x0 = x1, y0 = y1
+					}
+					return inside
+				}
+
+				function mousemove() {
+					var c = getCountry(this)
+					if (!c) {
+						if (currentCountry) {
+							leave(currentCountry)
+							currentCountry = undefined
+							render()
+						}
+						return
+					}
+					if (c === currentCountry) {
+						return
+					}
+					currentCountry = c
+					render()
+					enter(c)
+				}
+
+				function getCountry(event) {
+					var pos = projection.invert(d3.mouse(event))
+					return countries.features.find(function (f) {
+						return f.geometry.coordinates.find(function (c1) {
+							return polygonContains(c1, pos) || c1.find(function (c2) {
+								return polygonContains(c2, pos)
+							})
+						})
+					})
+				}
+
+
+				//
+				// Initialization
+				//
+
+				setAngles()
+
+				canvas
+					.call(d3.drag()
+						.on('start', dragstarted)
+						.on('drag', dragged)
+						.on('end', dragended)
+					)
+					.on('mousemove', mousemove)
+
+				loadData(function (world, cList) {
+					land = topojson.feature(world, world.objects.land)
+					countries = topojson.feature(world, world.objects.countries)
+					countryList = cList
+
+					window.addEventListener('resize', scale)
+					scale()
+					autorotate = d3.timer(rotate)
+				})
+	</script>
+</body>
+
+</html>
