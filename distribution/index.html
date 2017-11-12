@@ -99,7 +99,7 @@
         position: absolute;
         bottom: 15px;
         left: 20px;
-        background: url(/frontend/distribution/ce.png);
+        background: url(ce.png);
       }
 
 
@@ -117,8 +117,6 @@
   </div>
 
   <div id="currentInfo">
-    <span id="year1990" class="year">1990</span>
-    <span id="year2000" class="year">2000</span>
     <span id="year2001" class="year">2001</span>
     <span id="year2002" class="year">2002</span>
     <span id="year2003" class="year">2003</span>
@@ -135,6 +133,7 @@
     <span id="year2014" class="year">2014</span>
     <span id="year2015" class="year">2015</span>
     <span id="year2016" class="year">2016</span>
+    <span id="year2017" class="year">2017</span>
   </div>
 
   <div id="title">
@@ -160,7 +159,7 @@
       Detector.addGetWebGLMessage();
     } else {
 
-      var years = ['1990'];//, '2000', '2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016'];
+      var years = ['2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017'];
       var container = document.getElementById('container');
       var globe = new DAT.Globe(container, {imgDir: './'});
 
@@ -199,7 +198,7 @@
       
 
       xhr = new XMLHttpRequest();
-      xhr.open('GET', '../data/jmlrMembers.json', true);
+      xhr.open('GET', '../data/publication.json', true);
       xhr.onreadystatechange = function(e) {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
@@ -248,17 +247,37 @@
       }, this);
     };
     
-    var data = [];
-    function getData() {
-      countryGrid.forEach(function(cg) {
+    function generateData() {
+      newData = [];
+      data.forEach(yearData => {
+        var newYearData = [yearData[0], []];
+        yearData[1].forEach(element => {
+          newYearData[1].push(element);
+        });
+        countryGrid.forEach(function(cg) {
          cg.grids.forEach(function(grid) {
-           data.push(grid[1],grid[0], getNearestValue(cities, grid[1], grid[0], 44, 0.001))
+            newYearData[1].push(grid[1],grid[0], getNearestMagnitude(yearData[1], grid[1], grid[0]))
          }, this);
-      }, this);
-      cities.forEach(function(city) {
-          data.push(city.lat, city.long, city.frequency/44/4);
-      }, this);
+        }, this);
+        newData.push(newYearData);
+      });
+
+      return newData;
     };
+
+    function getNearestMagnitude(yearData, lat, long) {
+      var val = 0;
+      var distance = Infinity;
+      for(var i=0; i< yearData.length/3; ++i) {
+        var offset = i*3;
+        var manhattanDistance = (lat - yearData[offset])*(lat - yearData[offset]) + (long - yearData[offset+1])*(long - yearData[offset+1]);
+        if(distance > manhattanDistance) {
+          distance = manhattanDistance;
+          val = yearData[offset + 2];
+        }
+      }
+      return val*Math.exp(-distance/5);
+1    }
 
     function getNearestValue(cities, lat, long, max, def=0.001) {
       var val = def*max;

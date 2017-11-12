@@ -4,6 +4,7 @@ html {
 }
 
 #stars {
+  z-index: 0;
   width: 1px;
   height: 1px;
   background: transparent;
@@ -21,6 +22,7 @@ html {
 }
 
 #stars2 {
+  z-index: 1;
   width: 2px;
   height: 2px;
   background: transparent;
@@ -45,6 +47,7 @@ html {
   animation: animStar 150s linear infinite;
 }
 #stars3:after {
+  z-index: 2;
   content: " ";
   position: absolute;
   top: 2000px;
@@ -65,9 +68,17 @@ html {
 }
 
 #container {
-    z-index: 100000000;
+    z-index: 3;
 }
 
 canvas {
     z-index: 1;
+}
+
+#info {
+  z-index: 5;
+}
+
+#currentInfo {
+  z-index: 5;
 }
