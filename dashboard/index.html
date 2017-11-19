@@ -145,6 +145,7 @@
 			stroke: #FF4A4A;
 			stroke-width: 2px;
 		}
+
 		#canvas-svg {
 			text-align: center;
 		}
@@ -159,13 +160,17 @@
 				<a href="index.html" class="navbar-brand">
 					<small>
 						<i class="fa fa-leaf"></i>
-						Visualisasi Data
+						Data Visualization
 					</small>
 				</a>
+
+				<button class="pull-right navbar-toggle navbar-toggle-img collapsed" type="button" data-toggle="collapse" data-target=".navbar-buttons,.navbar-menu"
+				 style="background:#438EB9">
+					<span class="fa fa-bars" style="font-size: 30px;"></span>
+				</button>
 			</div>
 		</div>
 
-		
 		<nav role="navigation" class="navbar-menu pull-left collapse navbar-collapse">
 			<ul class="nav navbar-nav">
 				<li>
@@ -182,7 +187,7 @@
 				</li>
 				<li>
 					<a href="../relation/index.html">
-						<i class="ace-icon fa fa-refresh"></i>
+						<i class="ace-icon fa fa-sitemap"></i>
 						Global Relation
 					</a>
 				</li>
@@ -200,6 +205,11 @@
 		<div class="main-content">
 			<div class="main-content-inner">
 				<div class="page-content">
+					<div class="row">
+						<div class="col-xs-12 text-center">
+							<h2>JMLR PAPER VISUALIZATION</h2>
+						</div>
+					</div>
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
@@ -220,7 +230,7 @@
 			<div class="footer-inner">
 				<div class="footer-content">
 					<span class="bigger-120">
-						Visualisasi Data 2017
+						JMLR PAPER VISUALIZATION
 					</span>
 				</div>
 			</div>
@@ -499,7 +509,7 @@
 						.attr("y", 6)
 						.attr("dy", ".71em")
 						.style("text-anchor", "right")
-						.text("PAPER");
+						.text("NUMBER OF PAPER");
 
 					chart.selectAll(".tick").append("line")
 						.attr("x1", 0)
@@ -623,7 +633,7 @@
 
 						.on("click", function (d) {
 							// alert(JSON.stringify(d));
-							location.href='../relation/index.html?countryName=' + name_id_map_iso[d.id]
+							location.href = '../relation/index.html?countryName=' + name_id_map_iso[d.id]
 						});;
 
 					svg.append("path")
