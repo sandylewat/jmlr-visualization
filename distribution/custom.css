@@ -1,4 +1,4 @@
-html {
+.hide-overflow {
   height: 100%;
   overflow: hidden;
 }
