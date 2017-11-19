@@ -94,7 +94,7 @@
       }
 
       #ce {
-        width: 107px;
+      width: 107px;
         height: 55px;
         display: block;
         position: absolute;
@@ -242,7 +242,7 @@
         } else {
           countryGrid.push({
             name: entry,
-            grids: turf.coordAll(turf.pointGrid(feature,1,'degrees',true,true))
+            grids: turf.coordAll(turf.pointGrid(feature,1.5,'degrees',true,true))
           });
         }
       }, this);
