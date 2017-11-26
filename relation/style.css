@@ -181,7 +181,7 @@ Elements to control the title and country selector
     position: 				absolute;
 /*    width: 					95%; */
     left: 					30px;
-    top: 					20px;
+    top: 					0px;
     color: 					#fff;
     font-family: 			'RopaSans';
     display:                none;
@@ -202,7 +202,7 @@ Elements to control the title and country selector
 #hudButtons {
     display: none;
     position: absolute;
-    top: 20px;    
+    top: 60px;    
 
     width: 489px;
 }
