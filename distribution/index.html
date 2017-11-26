@@ -56,8 +56,8 @@
 
       #title {
         position: absolute;
-        top: 20px;
-        width: 270px;
+        top: 5px;
+        width: 150px;
         left: 20px;
         background-color: rgba(0,0,0,0.2);
         border-radius: 3px;
@@ -103,15 +103,52 @@
         background: url(ce.png);
       }
 
+    /* Add a black background color to the top navigation */
+    .topnav {
+        background-color: #333;
+        overflow: hidden;
+    }
 
+    /* Style the links inside the navigation bar */
+    .topnav a {
+        float: left;
+        color: #f2f2f2;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+    }
+
+    /* Change the color of links on hover */
+    .topnav a:hover {
+        background-color: #ddd;
+        color: black;
+    }
+
+    /* Add a color to the active/current link */
+    .topnav a.active {
+        background-color: #4CAF50;
+        color: white;
+    }
     </style>
+<!--    <link rel="stylesheet" href="../dashboard/assets/css/bootstrap.css" />-->
     <link href='custom.css' rel='stylesheet' type='text/css'>
+      <link rel="stylesheet" href="../assets/css/nav.css" />
+    
   </head>
   <body class="hide-overflow">
+    <div class="topnav" id="myTopnav">
+        <a class="active" href="#"><i class="ace-icon fa fa-globe"></i> Global Distribution</a>
+        <a href="../relation"><i class="ace-icon fa fa-sitemap"></i> Global Relation</a>
+        <a href="../dashboard"><i class="ace-icon fa fa-dashboard"></i> Global Overview</a>
+        <a href="../story.html"><i class="fa fa-leaf"></i> Home</a>
+    </div>
+  <div id="container">
+      
+      </div>
   <div id="loading">
     <h2 id="loading-message">Preparing hamsters wheel ....</h2>
   </div>
-  <div id="container"></div>
   <div id='stars'></div>
   <div id='stars2'></div>
   <div id='stars3'></div>
@@ -140,7 +177,7 @@
   </div>
 
   <div id="title">
-    JMLR Paper Distribution &nbsp;&nbsp; <a href="../dashboard/index.html">Back to Dashboard</a>
+    JMLR Paper Distribution 
   </div>
 
   <a id="ce" href="http://www.chromeexperiments.com/globe">

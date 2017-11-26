@@ -26,7 +26,7 @@
 		<![endif]-->
 	<link rel="stylesheet" href="assets/css/ace-skins.min.css" />
 	<link rel="stylesheet" href="assets/css/ace-rtl.min.css" />
-
+    <link rel="stylesheet" href="../assets/css/nav.css" />
 	<!--[if lte IE 9]>
 		  <link rel="stylesheet" href="assets/css/ace-ie.min.css" />
 		<![endif]-->
@@ -145,6 +145,7 @@
 			stroke: #FF4A4A;
 			stroke-width: 2px;
 		}
+
 		#canvas-svg {
 			text-align: center;
 		}
@@ -153,44 +154,12 @@
 </head>
 
 <body class="no-skin">
-	<div id="navbar" class="navbar navbar-default    navbar-collapse       h-navbar ace-save-state">
-		<div class="navbar-container ace-save-state" id="navbar-container">
-			<div class="navbar-header pull-left">
-				<a href="index.html" class="navbar-brand">
-					<small>
-						<i class="fa fa-leaf"></i>
-						Visualisasi Data
-					</small>
-				</a>
-			</div>
-		</div>
-
-		
-		<nav role="navigation" class="navbar-menu pull-left collapse navbar-collapse">
-			<ul class="nav navbar-nav">
-				<li>
-					<a href="#">
-						<i class="ace-icon fa fa-dashboard"></i>
-						Global Overview
-					</a>
-				</li>
-				<li>
-					<a href="../distribution/index.html">
-						<i class="ace-icon fa fa-globe"></i>
-						Global Distribution
-					</a>
-				</li>
-				<li>
-					<a href="../relation/index.html">
-						<i class="ace-icon fa fa-refresh"></i>
-						Global Relation
-					</a>
-				</li>
-			</ul>
-		</nav>
-
-		<!-- /.navbar-container -->
-	</div>
+	<div class="topnav" id="myTopnav">
+        <a href="../distribution"><i class="ace-icon fa fa-globe"></i> Global Distribution</a>
+        <a href="../relation"><i class="ace-icon fa fa-sitemap"></i> Global Relation</a>
+        <a class="active" href="#"><i class="ace-icon fa fa-dashboard"></i> Global Overview</a>
+        <a href="../story.html"><i class="fa fa-leaf"></i> Home</a>
+    </div>
 
 	<div class="main-container ace-save-state" id="main-container">
 		<script type="text/javascript">
@@ -200,6 +169,11 @@
 		<div class="main-content">
 			<div class="main-content-inner">
 				<div class="page-content">
+					<div class="row">
+						<div class="col-xs-12 text-center">
+							<h2>JMLR PAPER VISUALIZATION</h2>
+						</div>
+					</div>
 					<div class="row">
 						<div class="col-xs-12">
 							<!-- PAGE CONTENT BEGINS -->
@@ -220,7 +194,7 @@
 			<div class="footer-inner">
 				<div class="footer-content">
 					<span class="bigger-120">
-						Visualisasi Data 2017
+						JMLR PAPER VISUALIZATION
 					</span>
 				</div>
 			</div>
@@ -499,7 +473,7 @@
 						.attr("y", 6)
 						.attr("dy", ".71em")
 						.style("text-anchor", "right")
-						.text("PAPER");
+						.text("NUMBER OF PAPER");
 
 					chart.selectAll(".tick").append("line")
 						.attr("x1", 0)
@@ -623,7 +597,7 @@
 
 						.on("click", function (d) {
 							// alert(JSON.stringify(d));
-							location.href='../relation/index.html?countryName=' + name_id_map_iso[d.id]
+							location.href = '../relation/index.html?countryName=' + name_id_map_iso[d.id]
 						});;
 
 					svg.append("path")

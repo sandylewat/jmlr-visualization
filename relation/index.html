@@ -6,10 +6,17 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, initial-scale=1">
 	<link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="../assets/css/nav.css" />
 
 </head>
 
 <body onload="start()" id="dataviz" class="">
+    <div class="topnav" id="myTopnav">
+        <a href="../distribution"><i class="ace-icon fa fa-globe"></i> Global Distribution</a>
+        <a class="active" href="#"><i class="ace-icon fa fa-sitemap"></i> Global Relation</a>
+        <a href="../dashboard"><i class="ace-icon fa fa-dashboard"></i> Global Overview</a>
+        <a href="../story.html"><i class="fa fa-leaf"></i> Home</a>
+    </div>
 		<div id='stars'></div>
 		<div id='stars2'></div>
 		<div id='stars3'></div>
@@ -157,7 +164,6 @@
 			<input type="button" value="—" class="zoomBtn zoomOutBtn armsBtn pointer noMapDrag">
 			<input type="button" value="+" class="zoomBtn zoomInBtn armsBtn pointer noMapDrag">
 			<input type="button" value="ABOUT" class="aboutBtn armsBtn pointer">
-			<input type="button" value="DASHBOARD" class="armsBtn pointer" onclick="location.href='../dashboard/index.html'">
 			<br class="clear" />
 		</div>
 		<div id="history" class="overlayCountries noPointer">
