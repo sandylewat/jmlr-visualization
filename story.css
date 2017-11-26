@@ -88,3 +88,24 @@ a:hover {
     left: 20px;
     background: url(ce.png);
 }
+
+.lines-background{
+    width:100%;
+    overflow: hidden;
+    position:absolute;
+    top:0;
+    left:0;
+    bottom:0;
+    right:0;
+    background-color: #1a1724;               
+}
+
+#feedback a.button, #feedback h2  {
+    color: white;
+    text-decoration-color: white;
+}
+
+#feedback .button {
+    box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.2);
+    color: white !important;    
+}

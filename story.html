@@ -2,7 +2,7 @@
 <html>
 
 <head>
-	<title>Team 1 . JMLR Data Visualization</title>
+	<title>JMLR Data Visualization</title>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	<link rel="stylesheet" href="assets/css/main.css" />
@@ -14,17 +14,17 @@
 
 	<!-- Wrapper -->
 	<div id="wrapper" class="divided">
-		<section class="banner style1 orient-left content-align-left image-position-right fullscreen onload-image-fade-in onload-content-fade-right">
+		<section class="banner style5 orient-left content-align-left image-position-right fullscreen onload-image-fade-in onload-content-fade-right">
 			<div class="content">
-				<h1>Paper Distribution</h1>
-				<p class="major">JMLR (Journal of Machine Learning Research) is one of the biggest publication journals for machine learning studies, with the biggest H-index in machine learning studies as of 2017. Our visualization contains some interesting insights that can be gotten from the publication history of JMLR.</p>
+				<h1>JMLR Data Visualization</h1>
+				<p class="major">JMLR (Journal of Machine Learning Research) is one of the biggest publication journals for machine learning studies,
+					with the biggest H-index in machine learning studies as of 2017. Our visualization contains some interesting insights
+					that can be gotten from the publication history of JMLR.</p>
 				<ul class="actions vertical">
 					<li>
-						<a href="distribution/" class="button big wide smooth-scroll-middle">Go Fullscreen</a>
+						<a href="http://www.jmlr.org/" class="button big wide smooth-scroll-middle">Learn More</a>
 					</li>
 				</ul>
-			</div>
-			<div class="image">
 			</div>
 		</section>
 
@@ -32,7 +32,8 @@
 		<section class="banner style1 orient-left content-align-left image-position-right fullscreen onload-image-fade-in onload-content-fade-right">
 			<div class="content">
 				<h1>Paper Distribution</h1>
-				<p class="major">JMLR paper counts on WebGL Globe. This visualization shows the big picture of papers produced by members of JMLR accross the globe every year.</p>
+				<p class="major">JMLR paper counts on WebGL Globe. This visualization shows the big picture of papers produced by members of JMLR accross
+					the globe every year.</p>
 				<ul class="actions vertical">
 					<li>
 						<a href="distribution/" class="button big wide smooth-scroll-middle">Go Fullscreen</a>
@@ -67,14 +68,16 @@
 		<section class="spotlight style1 orient-right content-align-left image-position-center onscroll-image-fade-in" id="first">
 			<div class="content">
 				<h2>Citation Visualized</h2>
-				<p>This visualization draws the relationship between each country's citation history (numbers of citation on papers from others countries and the number of times other countries cite papers from a another country) using 3D Globe. See the cumulative increase of papers released every year for every country with interactive histogram and relation link.</p>
+				<p>This visualization draws the relationship between each country's citation history (numbers of citation on papers from
+					others countries and the number of times other countries cite papers from a another country) using 3D Globe. See the
+					cumulative increase of papers released every year for every country with interactive histogram and relation link.</p>
 				<ul class="actions horizontal">
 					<li>
 						<a href="relation/" class="button">Go to Visualization</a>
 					</li>
 				</ul>
 			</div>
-			
+
 			<div class="image">
 				<img src="images/relation.png" alt="" />
 			</div>
@@ -84,7 +87,9 @@
 		<section class="spotlight style1 orient-left content-align-left image-position-center onscroll-image-fade-in">
 			<div class="content">
 				<h2>Comparison</h2>
-				<p>Previous visualization shows each country's cumulative histogram. This visualization gives you the comparison of each country's number of papers produced. You can also jump to the relation globe by clicking the a country in this visualization's map.</p>
+				<p>Previous visualization shows each country's cumulative histogram. This visualization gives you the comparison of each
+					country's number of papers produced. You can also jump to the relation globe by clicking the a country in this visualization's
+					map.</p>
 				<ul class="actions vertical">
 					<li>
 						<a href="dashboard/" class="button">Go to Visualization</a>
@@ -125,7 +130,7 @@
 					</li>
 				</ul>
 			</div>
-			
+
 		</section>
 		<!-- Six -->
 		<!-- <section class="wrapper style1 align-center">
@@ -210,10 +215,13 @@
 		</section> -->
 
 		<!-- Seven -->
-		<section class="wrapper style1 align-center">
-			<div class="inner medium">
+		<section class="banner style5 orient-left content-align-center image-position-right medium">
+			<div class="content" id="feedback">
 				<h2>Got something on your mind?</h2>
 				<a href="https://docs.google.com/forms/d/e/1FAIpQLSe8hCknuV7J5LADHU88Lzk3imYGosF4Jj1UjI3L0Z53QM9HZg/viewform" class="button">Send Your Feedback</a>
+			</div>
+			<div class="image">
+				<div class="gradient lines-background"></div>
 			</div>
 		</section>
 
@@ -240,7 +248,87 @@
 	<script type="text/javascript" src="distribution/globe.js"></script>
 	<script type="text/javascript" src="data/countries2.js"></script>
 
+	<script src="public/js/lib/projector.js"></script>
+	<script src="public/js/lib/canvas-renderer.js"></script>
+	<script src="public/js/lib/3d-lines-animation.js"></script>
+	<script src="public/js/lib/color.js"></script>
+
 	<script type="text/javascript">
+		function check() {
+			activeCountries.forEach(function (entry) {
+				if (!countries.features.some(function (feature) {
+					return feature.properties.name == entry;
+				})) {
+					console.log(entry);
+				}
+			}, this);
+		}
+
+		var countryGrid = [];
+		var featureList = [];
+		function initGrid() {
+			activeCountries.forEach(function (entry) {
+				var feature = countries.features.find(function (feature) {
+					return feature.properties.name == entry;
+				});
+
+				featureList.push(feature);
+				if (typeof feature == "undefined") {
+					console.log(entry);
+				} else {
+					countryGrid.push({
+						name: entry,
+						grids: turf.coordAll(turf.pointGrid(feature, 1.5, 'degrees', true, true))
+					});
+				}
+			}, this);
+		};
+
+		function generateData() {
+			newData = [];
+			data.forEach(yearData => {
+				var newYearData = [yearData[0], []];
+				yearData[1].forEach(element => {
+					newYearData[1].push(element);
+				});
+				countryGrid.forEach(function (cg) {
+					cg.grids.forEach(function (grid) {
+						newYearData[1].push(grid[1], grid[0], getNearestMagnitude(yearData[1], grid[1], grid[0]))
+					}, this);
+				}, this);
+				newData.push(newYearData);
+			});
+
+			return newData;
+		};
+
+		function getNearestMagnitude(yearData, lat, long) {
+			var val = 0;
+			var distance = Infinity;
+			for (var i = 0; i < yearData.length / 3; ++i) {
+				var offset = i * 3;
+				var squaredDistance = (lat - yearData[offset]) * (lat - yearData[offset]) + (long - yearData[offset + 1]) * (long - yearData[offset + 1]);
+				if (distance > squaredDistance) {
+					distance = squaredDistance;
+					val = yearData[offset + 2];
+				}
+			}
+			return val * Math.exp(-distance / 5);
+		}
+
+		function getNearestValue(cities, lat, long, max, def = 0.001) {
+			var val = def * max;
+			var distance = Infinity;
+			cities.forEach(function (city) {
+				currentDistance = (lat - city.lat) * (lat - city.lat) + (long - city.long) * (long - city.long);
+				if (distance > currentDistance) {
+					distance = currentDistance;
+					val = city.frequency;
+				}
+			}, this);
+			val = val / max / 4;
+			return val * Math.exp(-distance / 5);
+		}
 
 		if (!Detector.webgl) {
 			Detector.addGetWebGLMessage();
@@ -284,7 +372,7 @@
 			}
 
 			xhr = new XMLHttpRequest();
-			xhr.open('GET', 'data/publication.json', true);
+			xhr.open('GET', 'data/slim-pub.json', true);
 			xhr.onreadystatechange = function (e) {
 				if (xhr.readyState === 4) {
 					if (xhr.status === 200) {
