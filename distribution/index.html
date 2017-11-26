@@ -108,7 +108,9 @@
     <link href='custom.css' rel='stylesheet' type='text/css'>
   </head>
   <body class="hide-overflow">
-
+  <div id="loading">
+    <h2 id="loading-message">Preparing hamsters wheel ....</h2>
+  </div>
   <div id="container"></div>
   <div id='stars'></div>
   <div id='stars2'></div>
@@ -155,146 +157,156 @@
   <script type="text/javascript" src="../data/cityFrequency.js"></script>
   
   <script type="text/javascript">
+function check() {
+			activeCountries.forEach(function (entry) {
+				if (!countries.features.some(function (feature) {
+					return feature.properties.name == entry;
+				})) {
+					console.log(entry);
+				}
+			}, this);
+		}
 
-    if(!Detector.webgl){
-      Detector.addGetWebGLMessage();
-    } else {
+		var countryGrid = [];
+		var featureList = [];
+		function initGrid() {
+			countryGrid = [];
+			featureList = [];
+			activeCountries.forEach(function (entry) {
+				var feature = countries.features.find(function (feature) {
+					return feature.properties.name == entry;
+				});
 
-      var years = ['2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017'];
-      var container = document.getElementById('container');
-      var globe = new DAT.Globe(container, {imgDir: './'});
+				featureList.push(feature);
+				if (typeof feature == "undefined") {
+					console.log(entry);
+				} else {
+					countryGrid.push({
+						name: entry,
+						grids: turf.coordAll(turf.pointGrid(feature, 1.5, 'degrees', true, true))
+					});
+				}
+			}, this);
+		};
 
-      console.log(globe);
-      var i, tweens = [];
-      
-      var settime = function(globe, t) {
-        return function() {
-          new TWEEN.Tween(globe).to({time: t/years.length},500).easing(TWEEN.Easing.Cubic.EaseOut).start();
-          var y = document.getElementById('year'+years[t]);
-          if (y.getAttribute('class') === 'year active') {
-            return;
-          }
-          var yy = document.getElementsByClassName('year');
-          for(i=0; i<yy.length; i++) {
-            yy[i].setAttribute('class','year');
-          }
-          y.setAttribute('class', 'year active');
-        };
-      };
-      
-      for(var i = 0; i<years.length; i++) {
-        var y = document.getElementById('year'+years[i]);
-        y.addEventListener('mouseover', settime(globe,i), false);
-      }
-      
-      var xhr;
-      TWEEN.start();
-      
-      var points = [];
-      for(var lat = -15; lat < 15; ++lat) {
-        for(var long = -20; long < 20; ++long) {
-          points.push(lat, long, 0.005)
-        }
-      }
-      
+		function generateData(data) {
+			newData = [];
+			data.forEach(yearData => {
+				var newYearData = [yearData[0], []];
+				yearData[1].forEach(element => {
+					newYearData[1].push(element);
+				});
+				countryGrid.forEach(function (cg) {
+					cg.grids.forEach(function (grid) {
+						newYearData[1].push(grid[1], grid[0], getNearestMagnitude(yearData[1], grid[1], grid[0]))
+					}, this);
+				}, this);
+				newData.push(newYearData);
+			});
 
-      xhr = new XMLHttpRequest();
-      xhr.open('GET', '../data/publication.json', true);
-      xhr.onreadystatechange = function(e) {
-        if (xhr.readyState === 4) {
-          if (xhr.status === 200) {
+			return newData;
+		};
+
+		function getNearestMagnitude(yearData, lat, long) {
+			var val = 0;
+			var distance = Infinity;
+			for (var i = 0; i < yearData.length / 3; ++i) {
+				var offset = i * 3;
+				var squaredDistance = (lat - yearData[offset]) * (lat - yearData[offset]) + (long - yearData[offset + 1]) * (long - yearData[offset + 1]);
+				if (distance > squaredDistance) {
+					distance = squaredDistance;
+					val = yearData[offset + 2];
+				}
+			}
+			val = val * Math.exp(-distance / 4);
+			val = val == 0 ? 0.001 : val;
+			return val * -1;
+		}
+
+		function getNearestValue(cities, lat, long, max, def = 0.001) {
+			var val = def * max;
+			var distance = Infinity;
+			cities.forEach(function (city) {
+				currentDistance = (lat - city.lat) * (lat - city.lat) + (long - city.long) * (long - city.long);
+				if (distance > currentDistance) {
+					distance = currentDistance;
+					val = city.frequency;
+				}
+			}, this);
+			val = val / max / 4;
+			return val * Math.exp(-distance / 5);
+		}
+
+		if (!Detector.webgl) {
+			Detector.addGetWebGLMessage();
+		} else {
+			document.body.style.backgroundImage = "distribution/loading.gif";
+			var years = ['2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008', '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016', '2017'];
+			var container = document.getElementById('container');
+			var globe = new DAT.Globe(container, { imgDir: './' });
+
+			console.log(globe);
+			var i, tweens = [];
+
+			var settime = function (globe, t) {
+				return function () {
+					new TWEEN.Tween(globe).to({ time: t / years.length }, 500).easing(TWEEN.Easing.Cubic.EaseOut).start();
+					var y = document.getElementById('year' + years[t]);
+					if (y.getAttribute('class') === 'year active') {
+						return;
+					}
+					var yy = document.getElementsByClassName('year');
+					for (i = 0; i < yy.length; i++) {
+						yy[i].setAttribute('class', 'year');
+					}
+					y.setAttribute('class', 'year active');
+				};
+			};
+
+			for (var i = 0; i < years.length; i++) {
+				var y = document.getElementById('year' + years[i]);
+				y.addEventListener('mouseover', settime(globe, i), false);
+			}
+
+			var xhr;
+			TWEEN.start();
+
+			var points = [];
+			for (var lat = -15; lat < 15; ++lat) {
+				for (var long = -20; long < 20; ++long) {
+					points.push(lat, long, 0.005)
+				}
+			}
+
+			xhr = new XMLHttpRequest();
+      xhr.open('GET', '../data/slim-pub.json', true);
+      document.getElementById("loading-message").innerText = "Fetching JSON ...";
+			console.log("Fetching data");
+			xhr.onreadystatechange = function (e) {
+				if (xhr.readyState === 4) {
+					console.log("Data loaded");
+					if (xhr.status === 200) {
+						document.getElementById("currentInfo").hidden = false;
             var data = JSON.parse(xhr.responseText);
-            window.data = data;
-            for (i=0;i<years.length;i++) {
-              globe.addData(data[i][1], {format: 'magnitude', name: data[i][0], animated: true});
-            }
-            globe.createPoints();
-            settime(globe,0)();
+            document.getElementById("loading-message").innerText = "Generating nice grids ...";
+						console.log("Generating nice grids");
+            initGrid();
+            document.getElementById("loading-message").innerText = "Generating data ...";
+						data = generateData(data);
+						for (i = 0; i < years.length; i++) {
+							globe.addData(data[i][1], { format: 'magnitude', name: data[i][0], animated: true });
+						}
+						globe.createPoints();
+						settime(globe, 0)();
             globe.animate();
+            document.getElementById("loading").hidden = true;
             document.body.style.backgroundImage = 'none'; // remove loading
-          }
-        }
-      };
-      xhr.send(null);
-    }   
-
-    function check() {
-      activeCountries.forEach(function(entry) {
-        if(!countries.features.some(function(feature) {
-          return feature.properties.name == entry;
-        })) {
-          console.log(entry);
-        }
-      }, this);
-    }
-
-    var countryGrid = [];
-    var featureList = [];
-    function initGrid() {
-      activeCountries.forEach(function(entry) {
-        var feature = countries.features.find(function(feature) {
-          return feature.properties.name == entry;
-        });
-
-        featureList.push(feature);
-        if(typeof feature == "undefined") {
-          console.log(entry);
-        } else {
-          countryGrid.push({
-            name: entry,
-            grids: turf.coordAll(turf.pointGrid(feature,1.5,'degrees',true,true))
-          });
-        }
-      }, this);
-    };
-    
-    function generateData() {
-      newData = [];
-      data.forEach(yearData => {
-        var newYearData = [yearData[0], []];
-        yearData[1].forEach(element => {
-          newYearData[1].push(element);
-        });
-        countryGrid.forEach(function(cg) {
-         cg.grids.forEach(function(grid) {
-            newYearData[1].push(grid[1],grid[0], getNearestMagnitude(yearData[1], grid[1], grid[0]))
-         }, this);
-        }, this);
-        newData.push(newYearData);
-      });
-
-      return newData;
-    };
-
-    function getNearestMagnitude(yearData, lat, long) {
-      var val = 0;
-      var distance = Infinity;
-      for(var i=0; i< yearData.length/3; ++i) {
-        var offset = i*3;
-        var squaredDistance = (lat - yearData[offset])*(lat - yearData[offset]) + (long - yearData[offset+1])*(long - yearData[offset+1]);
-        if(distance > squaredDistance) {
-          distance = squaredDistance;
-          val = yearData[offset + 2];
-        }
-      }
-      return val*Math.exp(-distance/5);
-    }
-
-    function getNearestValue(cities, lat, long, max, def=0.001) {
-      var val = def*max;
-      var distance = Infinity;
-      cities.forEach(function(city) {
-        currentDistance = (lat - city.lat) * (lat - city.lat) + (long - city.long) * (long - city.long);
-        if(distance > currentDistance) {
-          distance = currentDistance;
-          val = city.frequency;
-        }
-      }, this);
-      val = val/max/4;
-      return val*Math.exp(-distance/5);
-    }
-    
-    
+            
+					}
+				}
+			};
+			xhr.send(null);
+		}
   </script>
 
   </body>
