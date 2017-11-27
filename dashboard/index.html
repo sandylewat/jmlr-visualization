@@ -45,6 +45,9 @@
 		<script src="assets/js/respond.min.js"></script>
 		<![endif]-->
 	<style>
+		.topnav a {
+			color: #337ab7;
+		}
 		.y.axisRight text {
 			fill: orange;
 		}
@@ -289,20 +292,22 @@
 	<script src="assets/map/topojson.min.js"></script>
 	<script>
 
-		d3.csv("https://kel1-visdat.herokuapp.com/map", function (err, data) {
+		// d3.csv("https://kel1-visdat.herokuapp.com/map", function (err, data) {
+		d3.csv("data/datapaper.csv", function (err, data) {
 
 			var config = {
-				"color1": "#c3e2ff",
-				"color2": "#08306B",
+				"color1": "#A9D6FF",
+				"color2": "#041A3B",
 				"mainCategory": "Washington",
 				"averageCategory": "Nation Average",
 				"stateDataColumn": "state_and_district_of_columbia",
-				"valueDataColumn": "obese_adults_number"
+				"valueDataColumn": "obese_adults_number",
+				"scaleDataColumn": "scaling"
 			}
 
 			var WIDTH = 1200, HEIGHT = 520;
 
-			var COLOR_COUNTS = 9;
+			var COLOR_COUNTS = 90;
 
 			var SCALE = 1.15;
 
@@ -355,11 +360,14 @@
 
 			var MAP_CATEGORY = config.stateDataColumn;
 			var MAP_VALUE = config.valueDataColumn;
+			var MAP_SCALE = config.scaleDataColumn;
 
 			var width = WIDTH,
 				height = HEIGHT;
 
 			var valueById = d3.map();
+			var scaleById = d3.map();
+			var scaleByName = d3.map();
 
 			var startColors = COLOR_START.getColors(),
 				endColors = COLOR_END.getColors();
@@ -397,12 +405,17 @@
 				}
 
 				data.forEach(function (d) {
+					// console.log(d);
 					var id = name_id_map[d[MAP_CATEGORY]];
 					valueById.set(id, +d[MAP_VALUE]);
+					scaleById.set(id, +d[MAP_SCALE]);
+					scaleByName.set(+d[MAP_VALUE], +d[MAP_SCALE]);
 				});
 
-				quantize.domain([d3.min(data, function (d) { return +d[MAP_VALUE] }),
-				d3.max(data, function (d) { return +d[MAP_VALUE] })]);
+				quantize.domain([
+					d3.min(data, function (d) { return +d[MAP_SCALE] }),
+					d3.max(data, function (d) { return +d[MAP_SCALE] })
+				]);
 
 				function makeBars() {
 					var names = [],
@@ -494,7 +507,9 @@
 						})
 						.attr("height", bar_height)
 						.style("fill", function (d) {
-							var i = quantize(d.value);
+							console.log(d);
+							var i = quantize(scaleByName.get(d.value));
+							// var i = quantize(d.value);
 							var color = colors[i].getColors();
 							return "rgb(" + color.r + "," + color.g + "," + color.b + ")";
 						})
@@ -548,8 +563,9 @@
 						.enter().append("path")
 						.attr("transform", "scale(" + SCALE + ")")
 						.style("fill", function (d) {
-							if (valueById.get(d.id)) {
-								var i = quantize(valueById.get(d.id));
+							console.log(d);
+							if (scaleById.get(d.id)) {
+								var i = quantize(scaleById.get(d.id));
 								var color = colors[i].getColors();
 								return "rgb(" + color.r + "," + color.g +
 									"," + color.b + ")";
